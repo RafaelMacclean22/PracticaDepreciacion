@@ -56,16 +56,5 @@ namespace Infraestructure.Repository
                 throw;
             }
         }
-
-        public int Update(Activo t)
-        {
-            return context.Update<Activo>(t);
-        }
-
-        public List<Activo> Find()
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }

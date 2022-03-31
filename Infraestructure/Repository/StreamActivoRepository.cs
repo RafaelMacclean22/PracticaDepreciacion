@@ -56,15 +56,10 @@ namespace Infraestructure.Repository
             throw new NotImplementedException();
         }
 
-        public List<Activo> Find()
-        {
-            throw new NotImplementedException();
-        }
-
         public Activo GetById(int id)
         {
             Activo activo = null;
-            
+            bool success = false;
 
             try
             {
@@ -91,12 +86,12 @@ namespace Infraestructure.Repository
 
                         if(activo.Id == id)
                         {
-                            
+                            success = true;
                             break;
                         }
                     }
                 }
-                return  activo;
+                return success ? activo : null;
             }
             catch (IOException)
             {
@@ -138,11 +133,6 @@ namespace Infraestructure.Repository
                 throw;
             }
 
-        }
-
-        public int Update(Activo t)
-        {
-            throw new NotImplementedException();
         }
     }
 }

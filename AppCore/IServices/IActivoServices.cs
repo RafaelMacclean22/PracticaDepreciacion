@@ -10,6 +10,5 @@ namespace AppCore.IServices
    public interface IActivoServices: IServices<Activo>
     {
         Activo GetById(int id);
-       
     }
 }

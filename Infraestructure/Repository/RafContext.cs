@@ -292,102 +292,38 @@ namespace Infraestructure.Repository
            
         }
 
-        public int Update<T>(T t)
+
+
+
+        public int GetLastId()
         {
-            int id;
+            int k = 0;
+
             try
             {
-                id= (int)t.GetType().GetProperty("Id").GetValue(t);
-                int index = BinarySearch(id); // metodo de raf
-                if (index < 0)
+                using (BinaryReader brHeader = new BinaryReader(HeaderStream))
                 {
-                    throw new ArgumentException($" No se encuentra ningun objeto con el Id: {id}");
-                }
-                using(BinaryWriter bwdata = new BinaryWriter(DataStream))
-                {
-                    long posd = index * size;
-                    bwdata.BaseStream.Seek(posd, SeekOrigin.Begin);
-
-                    PropertyInfo[] info = t.GetType().GetProperties();
-                    foreach(PropertyInfo pi in info)
-                    { 
-                        Type type = pi.PropertyType;
-                        object obj = pi.GetValue(t, null);
-
-                        if (type.IsGenericType)
-                        {
-                            continue;
-                        }
-                        if (type == typeof(int))
-                        {
-                            bwdata.Write((int)obj);
-                        }
-                        else if (type == typeof(long))
-                        {
-                            bwdata.Write((long)obj);
-                        }
-                        else if (type == typeof(float))
-                        {
-                            bwdata.Write((float)obj);
-                        }
-                        else if (type == typeof(double))
-                        {
-                            bwdata.Write((double)obj);
-                        }
-                        else if (type == typeof(decimal))
-                        {
-                            bwdata.Write((decimal)obj);
-                        }
-                        else if (type == typeof(char))
-                        {
-                            bwdata.Write((char)obj);
-                        }
-                        else if (type == typeof(bool))
-                        {
-                            bwdata.Write((bool)obj);
-                        }
-                        else if (type == typeof(string))
-                        {
-                            bwdata.Write((string)obj);
-                        }
+                    if(brHeader.BaseStream.Length<=0)
+                    {
+                        return k;
                     }
+
+                    long posh = 4;
+                    brHeader.BaseStream.Seek(posh, SeekOrigin.Begin);
+
+                    k = brHeader.ReadInt32();
                 }
-                return id;
             }
-            catch (Exception)
+            catch(IOException)
             {
-                throw new ArgumentException($"El objeto {t.GetType().Name} no contiene la propiedad Id.");
+                throw;
             }
-        }
 
-        private int BinarySearch(int Buscardato)
-        {
-
-            using (BinaryReader brHeader = new BinaryReader(HeaderStream))
-            {
-                brHeader.BaseStream.Seek(0, SeekOrigin.Begin);
-                int fin = brHeader.ReadInt32() - 1;
-                int inicio = 0;
-                while (inicio <= fin)
-                {
-                    int indiceCentral = Convert.ToInt32(Math.Floor(Convert.ToDouble(inicio + fin) / 2));
-                    brHeader.BaseStream.Seek(8 + 4 * indiceCentral, SeekOrigin.Begin);
-                    int valorCentral = brHeader.ReadInt32();
-                    if (valorCentral == Buscardato)
-                    {
-                        return indiceCentral;
-                    }
-                    if (Buscardato < valorCentral)
-                    {
-                        fin = indiceCentral - 1;
-                    }
-                    else
-                    {
-                        inicio = indiceCentral + 1;
-                    }
-                }
-                return -1;
-            }
+            return k;
         }
     }
+
+
+
+
 }

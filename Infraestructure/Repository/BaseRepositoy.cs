@@ -28,14 +28,5 @@ namespace Infraestructure.Repository
         {
             return data;
         }
-        public int Update(T t)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<T> Find()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AppCore.Services
 {
-    public class ActivoServices : BaseServices<Activo>, IActivoServices
+    public class ActivoServices:BaseServices<Activo>,IActivoServices
     {
 
         IActivoModel activoModel;
@@ -22,8 +22,6 @@ namespace AppCore.Services
         {
             return activoModel.GetById(id);
         }
-
-        
     }
 
 }

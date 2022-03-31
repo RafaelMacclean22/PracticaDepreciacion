@@ -15,10 +15,6 @@ namespace practicaDepreciacion
     public partial class Form1 : Form
     {
         IActivoServices activoServices;
-        
-
-        private int SelecionarId;
-
         public Form1(IActivoServices ActivoServices)
         {
             this.activoServices = ActivoServices;
@@ -121,64 +117,6 @@ namespace practicaDepreciacion
         private void Form1_Load(object sender, EventArgs e)
         {
             dataGridView1.DataSource = activoServices.Read();
-        }
-
-        private void Button1_Click(object sender, EventArgs e)
-        {
-
-            try
-            {
-                bool verficar = verificar();
-                if (verficar == false)
-                {
-                    MessageBox.Show("Tienes que ingresar todos los datos");
-
-                }
-                else
-                {
-                    Activo activo = new Activo()
-                    {
-                        Nombre = txtNombre.Text,
-                        Valor = double.Parse(txtValor.Text),
-                        ValorResidual = double.Parse(txtValorR.Text),
-                        VidaUtil = int.Parse(txtVidaU.Text),
-                        Id = (int)numericUpDown1.Value
-                    };
-                    activoServices.Update(activo);
-                    dataGridView1.DataSource = null;
-                    limpiar();
-                    dataGridView1.DataSource = activoServices.Read();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            SelecionarId = (int)dataGridView1.Rows[e.RowIndex].Cells[0].Value;
-            MessageBox.Show(SelecionarId.ToString());
-        }
-
-        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex >= 0)
-            {
-                FrmDepreciacion depreciacion = new FrmDepreciacion(activoServices.Read()[e.RowIndex]);
-                depreciacion.ShowDialog();
-            }
-        }
-
-        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            Close();
         }
     }
 }
